@@ -49,7 +49,10 @@ app.use((req, res, next) => {
 });
 
 app.options('*', cors()); 
-
+app.use((req, res, next) => {
+  console.log('Origin:', req.headers.origin);
+  next();
+});
 
 
 // Middleware for parsing request bodies
