@@ -27,12 +27,19 @@ app.use(limiter);
 app.use(helmet());
 
 // CORS setup
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://travelapp-virid.vercel.app'], 
-  methods: 'GET,POST,PUT,DELETE',
-  credentials: true, 
-}));
+const allowedOrigins = ['http://localhost:3000', 'https://travelapp-virid.vercel.app'];
 
+app.use(cors({
+  origin: function (origin, callback) {
+    if (allowedOrigins.includes(origin) || !origin) { // Allow undefined origin for non-browser tools like Postman
+      callback(null, true);
+    } else {
+      callback(new Error('Forbidden: Invalid origin'));
+    }
+  },
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true,
+}));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', req.headers.origin);
   res.header('Access-Control-Allow-Credentials', 'true');
