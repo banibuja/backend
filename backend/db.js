@@ -1,18 +1,19 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config(); // Ngarkon variablat nga .env në `process.env`
+require('dotenv').config(); // Load environment variables
 
-// Parametrat e konfigurimit me vlera të paracaktuara
+// Load environment variables
 const dbName = process.env.DB_NAME || 'defaultdb';
 const dbUser = process.env.DB_USER || 'avnadmin';
 const dbPassword = process.env.DB_PASSWORD || 'AVNS_IMCbwml3zGByOJWl11U';
 const dbHost = process.env.DB_HOST || 'localhost';
-const dbPort = process.env.PORT || 3306; // Porti standard i MySQL
+const dbPort = process.env.DB_PORT || 3306;
 
+// Initialize Sequelize
 const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
   host: dbHost,
-  dialect: 'mysql',
   port: dbPort,
-  logging: false,
+  dialect: 'mysql',
+  logging: false, // Disable logging for cleaner output
   pool: {
     max: 10,
     min: 0,
@@ -20,19 +21,15 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
     idle: 10000,
   },
   dialectOptions: {
-    ssl: process.env.DB_SSL === 'true' ? {
-      rejectUnauthorized: false,
-    } : undefined, // Aktivizo SSL vetëm nëse është konfiguruar
+    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
   },
 });
 
+// Test the database connection
 (async () => {
   try {
     await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
-
-    await sequelize.sync();
-    console.log('Tabela(t) janë krijuar në MySQL.');
+    console.log('Database connection established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error.message);
   }

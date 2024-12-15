@@ -146,15 +146,16 @@ app.post('/logout', (req, res) => {
 
 
 
+
 const initializeDatabase = async () => {
   try {
-    await sequelize.sync();
-    const PORT = 5000;
+    await sequelize.sync(); // Sync database models
+    const PORT = process.env.PORT || 5000; // Server port
     app.listen(PORT, () => {
-      console.log(`Serveri po punon në portin ${PORT}`);
+      console.log(`Server is running on port ${PORT}`);
     });
   } catch (error) {
-    console.error('Gabim gjatë inicializimit të databazës:', error);
+    console.error('Error initializing the database:', error);
   }
 };
 
