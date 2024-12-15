@@ -96,13 +96,6 @@ passport.deserializeUser(async (id, done) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use((req, res, next) => {
-  if (req.headers.origin && req.headers.origin !== 'http://localhost:3000') {
-    return res.status(403).json({ error: "Forbidden: Invalid origin" });
-  }
-  next();
-});
-
 // Routes
 app.use('/api', routes);
 
