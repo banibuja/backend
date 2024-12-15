@@ -36,10 +36,11 @@ const loginUser = (req, res, next) => {
           { expiresIn: '24h' }
         );
         res.cookie('ubtsecured', token, {
+          domain: 'https://backend-c4qy.onrender.com', // or omit this line
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           maxAge: 24 * 60 * 60 * 1000,
-          sameSite: 'strict',
+          sameSite: 'None',
         });
         res.status(200).json({ message: 'Login i suksesshëm', user });
       });
